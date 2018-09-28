@@ -43,7 +43,7 @@ export default {
       this.$http.get('https://www.apiopen.top/journalismApi').
       then(res => {
         this.auto = eval( '(' +res.bodyText +')').data.auto;
-        this.tech = eval( '(' +res.bodyText +')').data.tech;
+        this.tech = eval( '(' +res.bodyText +')').data.sports;
         var allid = new Array();
         for (let i = 0; i < 8; i++) {
           allid.push(this.auto[i].docid)
@@ -53,6 +53,7 @@ export default {
         }
         this.id = allid;
         console.log(allid);
+        console.log(this.auto[0].picInfo[0]);
         Indicator.close();
       })
 

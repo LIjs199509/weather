@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --open --contentBase src --host 192.168.1.7"
+    "dev": "webpack-dev-server --open --contentBase src --host 192.168.1.7",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -38,7 +39,6 @@
     "vue-template-compiler": "^2.5.17",
     "vux": "^2.9.2",
     "webpack": "^3.8.1",
-    "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^2.11.3"
   },
   "dependencies": {

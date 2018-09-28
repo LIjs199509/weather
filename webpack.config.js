@@ -6,14 +6,17 @@ const webpack = require('webpack');
 module.exports = {
   entry: './src/main.js',
   output: {
-    // path:'./dist/js',
+    path:path.resolve(__dirname,'dist'),
     //方法一（最好不要这样做）
-    filename: './dist/bundle.js'
+    filename: 'bundle.js'
   },
   plugins: [
     new htmlWebpackPlugin({
       template: './src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      minify:{
+        collapseWhitespace : true
+      }
     }),
     new VueLoaderPlugin(),
     new webpack.ProvidePlugin({

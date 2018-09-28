@@ -14,9 +14,12 @@
 		ref="anniu"
 		>快开始吧({{ num }})</button>
 	</div>
-	<transition name="transitionRouter">
+	<div class="high">
+		<transition :name="transitionName">
 		<router-view></router-view>
-	</transition>
+		</transition>
+	</div>
+
 
 	<nav class="mui-bar mui-bar-tab">
 			<router-link class="mui-tab-item" to="/come">
@@ -36,21 +39,32 @@
 </template>
 
 <script>
-
+import "./router.js";
 export default {
 	data(){
 		return{
 			flag:true,
 			num: 3,
-			IP:''
+			IP:'',
+			transitionName:''
 		}
 	},
 	created(){
 		this.getIP()
 	},
+	watch:{
+		$route(to,from){
+			if( to.meta.index < from.meta.index){
+				this.transitionName = 'slide-right';
+			}else{
+				this.transitionName = 'slide-left';
+			}
+		}
+	},
 	methods:{
 		jinru(){
 					$('.start').addClass('animated fadeOutDown');
+					$('.high').removeClass('high')
 					setInterval(() => {this.flag = false}, 500);
 		},
 		getIP(){
@@ -63,22 +77,39 @@ export default {
 					}
 				}, 1000);
 			})
-			setInterval(() => {this.jinru()}, 3500)
+			setInterval(() => {this.jinru()}, 3300)
 		}
 	}
 }
 </script>
 
 <style lang="scss" scoped>
+.high{
+	height: 100px;
+	overflow: hidden;
+}
 .coming{
-	.transitionRouter-enter-active,
-	.transitionRouter-leave-active {
-			transition: all 0.4s;
+	.slide-right-enter-active,
+	.slide-right-leave-active,
+	.slide-left-enter-active,
+	.slide-left-leave-active {
+			will-change: transform;
+			transition: all .3s;
+			position: absolute;
+			width:100%;
+			left:0;
 	}
-
-	.transitionRouter-enter,
-	.transitionRouter-leave{
-			transform: translate3d(100%, 0, 0);
+	.slide-right-enter {
+			transform: translateX(-100%);
+	}
+	.slide-right-leave-active {
+			transform: translateX(100%);
+	}
+	.slide-left-enter {
+			transform: translateX(100%);
+	}
+	.slide-left-leave-active {
+			transform: translateX(-100%);
 	}
 	nav{
 		box-shadow: 0;

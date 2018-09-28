@@ -28,6 +28,8 @@
 			</button>
 			<div :class="icon"></div>
 			</div>
+			<p class="jinri">{{ riqi[0] }}{{ riqi[1] }}
+				{{ riqi[2] }}&emsp;{{ xingqi }}</p>
 			<p class="jinri">{{ high }}{{ low }}</p>
 			<p class="jinri">{{ wendu }}</p>
 
@@ -86,6 +88,18 @@
 					<p>{{ PM }}</p>
 					<p>{{ PMtishi }}</p>
 					<p>{{ tixing }}</p>
+
+				</div>
+				<div class="shijiandiv">
+					<ul class="mui-table-view shijian">
+						<p class="liship">历史上的{{ riqi[1] }}{{ riqi[2] }}</p>
+						<li class="mui-table-view-cell mui-media" v-for="item in shijian" :key="item.eid">
+							<div class="mui-media-body">
+								<p class="mui-ellipsis">{{item.date}}</p>
+								<p>{{item.title}}</p>
+							</div>
+						</li>
+					</ul>
 				</div>
 
 			</div>
@@ -150,6 +164,11 @@ export default {
 			hou2:'',
 			hou3:'',
 			hou4:'',
+			riqi:'',
+			yue:'',
+			ri:'',
+			xingqi:'',
+			shijian:'',
 			num:'3',
     	popupVisible: false,
 			right:['成都','重庆','武汉','昆明','大理','丽江','西安','厦门',
@@ -165,8 +184,9 @@ export default {
 		}
 	},
 	created(){
+		this.getDay();
 		this.getIP();
-
+		this.getHistory();
 	},
 	methods:{
 
@@ -223,15 +243,27 @@ export default {
 					console.log(every);
 					this.tianqi = every[0].type;
 					everyTian.unshift(every[0].type);
-
-
-					if (every[0].type === '阴'|'晴'|'多云'|'少云') {
-						this.titleColor = 'lightsalmon'
-						this.sevenColor = '#FFA783'
-					}else{
+					this.xingqi = every[1].date.split('日')[1];
+					switch (every[0].type) {
+						case '阴':
+						case '晴':
+						case '多云':
+						case '少云':
+							this.titleColor = 'lightsalmon'
+							this.sevenColor = '#FFA783'
+							break;
+						default:
 						this.titleColor = 'lightblue'
 						this.sevenColor = '#B2E0ED'
-					};
+							break;
+					}
+					// if (every[0].type === '阴'|'晴'|'多云'|'少云') {
+					// 	this.titleColor = 'lightsalmon'
+					// 	this.sevenColor = '#FFA783'
+					// }else{
+					// 	this.titleColor = 'lightblue'
+					// 	this.sevenColor = '#B2E0ED'
+					// };
 					console.log(every[0].type)
 					switch (every[0].type) {
 						case '多云':
@@ -326,6 +358,29 @@ export default {
 				}
 			})
 
+		},
+		getDay(){
+			var date = new Date();
+			const riqi = new Array();
+			var year = date.getFullYear();
+			var month = date.getMonth() + 1;
+			var day = date.getDate();
+			riqi.push(year + '年');
+			riqi.push(month + '月');
+			riqi.push(day + '日');
+			this.riqi = riqi;
+			this.yue = month;
+			this.ri = day;
+		},
+		getHistory(){
+			this.$http.jsonp('https://api.shenjian.io/todayOnhistory/queryEvent?appid=43b6e16563966a4387d5b83e5fb9c6c2&date='
+			 + this.yue + '/' + this.ri).then(res => {
+				console.log(res);
+				console.log(res.body.data);
+				var shijian = new Array();
+				shijian = res.body.data;
+				this.shijian = shijian;
+			})
 		}
 	}
 }
@@ -460,7 +515,29 @@ export default {
 			p{
 				margin: 10px 0;
 			}
+
+
 		}
+		.shijiandiv{
+				margin: 0 6%;
+				.shijian{
+					border-radius: 10px;
+					background-color:rgba(255,255,255,0.2);
+					height: 300px;
+					overflow: auto;
+					margin-bottom: 5px;
+					.liship{
+						text-align: center;
+						padding: 5px;
+						font-size: 0.35rem;
+						border-radius: 10px 10px 0 0;
+						background-color:rgba(255,255,255,0.1);
+					}
+					p{
+						margin: 0;
+					}
+				}
+			}
 	.title{
 		text-align: center;
 		height: 220px;

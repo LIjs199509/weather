@@ -10,10 +10,10 @@ var router = new VueRouter({
   routes: [
     { path: '/', redirect: '/come' },
     { path: '/home', component: app },
-    { path: '/come', component: come },
-    { path: '/chat', component: coming },
+    { path: '/come', component: come, meta: { index: 1 } },
+    { path: '/chat', component: coming, meta: { index: 2 } },
     { path: '/newsInfo/:id', component: newsInfo },
-    { path: '/guanyu', component: guanyu }
+    { path: '/guanyu', component: guanyu, meta: { index: 3 } }
   ],
   linkActiveClass: 'mui-active'
 });
